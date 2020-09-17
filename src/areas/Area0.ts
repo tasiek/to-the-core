@@ -5,6 +5,8 @@ import { Base } from '~/scenes';
 export default class Area0 extends AreaBase {
 
   constructor( scene: Base ) {
+  // 0 = no block
+  // 1 = line block
     const tiles = [
       [ 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0 ],
       [ 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1 ],
