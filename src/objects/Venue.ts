@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { Base } from '~/scenes';
-import { AreaBase as Area, AreaTiles, AreaTilesRow } from './AreaBase';
+import { Area } from './Area';
 
 
 export default class Venue extends Phaser.GameObjects.Graphics {
@@ -24,6 +24,10 @@ export default class Venue extends Phaser.GameObjects.Graphics {
     if( this.area ) {
       this.area.resizeField();
     }
+  }
+
+  getAllColliders(): Phaser.GameObjects.GameObject[] {
+    return this.area.getAllColliders();
   }
 }
 export { Venue };

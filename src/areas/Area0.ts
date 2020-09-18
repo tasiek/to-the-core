@@ -1,8 +1,8 @@
 
-import AreaBase from '~/objects/AreaBase';
+import Area from '~/objects/Area';
 import { Base } from '~/scenes';
 
-export default class Area0 extends AreaBase {
+export default class Area0 extends Area {
 
   constructor( scene: Base ) {
     const tiles = [

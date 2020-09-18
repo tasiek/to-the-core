@@ -25,7 +25,8 @@
 		"typescript": "^3.8.3"
 	},
 	"dependencies": {
-		"phaser": "^3.23.0"
+		"phaser": "^3.23.0",
+		"phaser3-rex-plugins": "^1.1.28"
 	},
 	"parcelCleanPaths": [
 		"docs"

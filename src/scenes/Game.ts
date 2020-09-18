@@ -1,4 +1,3 @@
-import Phaser from 'phaser';
 import { Base } from '~/scenes';
 import { Player } from '~/objects/Player';
 import { Venue } from '~/objects/Venue';
@@ -11,8 +10,9 @@ export default class Game extends Base
 
 	constructor() {
     super('game');
-	}
+  }
 
+  // update all on window resize
   resizeField( w: number, h: number ) {
     if (this.player) {
       this.player.resizeField();
@@ -25,6 +25,19 @@ export default class Game extends Base
   create(): void {
     this.player = new Player( this );
     this.venue = new Venue( this, new Area0(this) );
+
+    /*
+    this.physics.add.collider( 
+      this.player, 
+      this.venue.getAllColliders(), 
+      this.onPlayerCollision.bind(this) 
+    )
+    */
+  }
+
+  onPlayerCollision() {
+    console.log('collision!')
+    this.scene.pause();
   }
 
   update( t: number, d: number ): void {

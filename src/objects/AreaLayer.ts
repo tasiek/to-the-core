@@ -1,77 +1,112 @@
 
 import { Base } from '~/scenes';
-import { AreaTilesRow } from './AreaBase';
+import { AreaTilesRow } from './Area';
+import { Tile } from './Tile';
+import config from '~/config';
 
 /**
  * 
  */
 export default class AreaLayer extends Phaser.GameObjects.Container {
   protected tiles: AreaTilesRow;
-  protected distance: number = 1;
+  protected distance: number;             // not chaning over time
+  protected step: number = 0;
+
+  protected targetDistance: number;   // discrete!
+  protected currentDistance: number;  // changing while animating
 
   private baseScene: Base;
 
-  constructor( scene: Base, tiles: AreaTilesRow ) {
+  constructor( scene: Base, tiles: AreaTilesRow, distance: number = 1 ) {
     super( scene );
 
     this.baseScene = scene;
     this.tiles = tiles;
+    this.distance = distance;
+    this.currentDistance = distance;
+    this.targetDistance = distance;
 
-    this.placeObjects();
+    this.createObjects();
     scene.add.existing( this );
   }
 
-  placeObjects() {
+  createObjects() {
     const center = this.baseScene.getCenter();
+    const tileAngle = 360.0 / config.tilesPerLayer;
 
-    const tileAngle = 360.0/12;
-
-    // const circle = new Phaser.Geom.Circle(
-    //   center.x, center.y, 
-    //   this.getRadius()
-    // );
-
-    
     this.tiles.forEach( (tile, i) => {
-      // const tileObject = this.baseScene.add.ellipse( center.x, center.y, this.baseScene.getX(0.03), this.baseScene.getX(0.03), tile === 1 ? 0xFFFFFF : 0x000000, tile === 0 ? 0 : 1)
-
-      const tileObject = this.baseScene.add.arc(
-        center.x, center.y, 
-        this.getRadius(), 
-        i * tileAngle + 90 - tileAngle/2, (i+1) * tileAngle + 90 - tileAngle/2, 
-        false, 
-        tile === 1 ? 0xFFFFFF : 0x000000, 
-        tile === 0 ? 0 : 1
+      const tileObject = new Tile( 
+        this.baseScene, tile, center, this.getRadius(), 
+        Phaser.Math.DegToRad(i * tileAngle + 90 - tileAngle/2), 
+        Phaser.Math.DegToRad((i+1) * tileAngle + 90 - tileAngle/2), 
       );
+      this.scene.add.existing( tileObject );
+
+      this.scene.physics.world.enable( tileObject );
       this.add( tileObject );
     });
+
+    this.distanceUpdated();
+
     // Phaser.Actions.PlaceOnCircle( this.getAll(), circle, Phaser.Math.DegToRad(-90), Phaser.Math.DegToRad(270) );
   }
 
+  distanceUpdated() {
+    // only show 10 closest layers
+    // TODO: prettify
+    if( this.currentDistance > 10 || this.currentDistance < -3 ) {
+      Phaser.Actions.SetVisible( this.getAll(), false );
+    }
+    else {
+      Phaser.Actions.SetVisible( this.getAll(), true );
+
+      // TODO: scale the whole layer instead?
+      const scale = this.currentDistance > 0 ? 1/this.currentDistance : (2 + (-1*this.currentDistance));
+      Phaser.Actions.SetScale( 
+        this.getAll(),  
+        scale
+      );
+    }
+  }
+
   getRadius(): number {
-    return this.baseScene.getDimension(0.3 / this.distance ) ;
+    // radius for 'zero' distance 
+    return this.baseScene.getDimension(0.3);
   }
 
 
   update( t: number, d: number ): void {
-    this.updateDraw();
-  }
+    if( this.targetDistance != this.currentDistance) {
+      const speed = Phaser.Math.GetSpeed(this.targetDistance - this.currentDistance, 0.1);
+      this.currentDistance += speed * d;
+      this.distanceUpdated();
 
-  updateDraw(): void {
-    const center = this.baseScene.getCenter();
-    Phaser.Actions.SetXY( this.getAll(), center.x, center.y );
-    Phaser.Actions.PropertyValueSet( this.getAll(), 'radius', this.getRadius() )
+      if( Math.abs(this.targetDistance - this.currentDistance) < 0.001 ) {
+        this.currentDistance = this.targetDistance;
+      }
+    }
+    
   }
 
   resizeField() {
     // this.setScale( this.baseScene.getScale(0.1, 256) );
-    this.updateDraw();
+    Phaser.Actions.PropertyValueSet( 
+      this.getAll(), 'x', this.baseScene.getCenter().x 
+    );
+    Phaser.Actions.PropertyValueSet( 
+      this.getAll(), 'y', this.baseScene.getCenter().y 
+    );
   }
 
   setDistance( d: number ) {
-    this.distance = d > 0 ? d : 0;
-    this.updateDraw();
+    this.distance = d;
+    // this.distanceUpdated();
   }
 
+  setStep( step: number ) {
+    this.step = step;
+    this.targetDistance = this.distance - this.step;
+    console.log(this.targetDistance, this.currentDistance);
+  }
 }
 export { AreaLayer };

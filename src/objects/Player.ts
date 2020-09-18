@@ -1,8 +1,9 @@
 import Phaser from 'phaser';
 import { Base } from '~/scenes';
+import config from '~/config';
 
 
-export default class Player extends Phaser.GameObjects.Image
+export default class Player extends Phaser.Physics.Arcade.Image
 {
   cursorKeys?: Phaser.Types.Input.Keyboard.CursorKeys;
 
@@ -16,6 +17,7 @@ export default class Player extends Phaser.GameObjects.Image
     this.scene.add.existing( this );
     this.baseScene = scene;
 
+    scene.physics.world.enable(this);
     this.setupUserInput();
     this.resizeField();
   }
@@ -27,10 +29,10 @@ export default class Player extends Phaser.GameObjects.Image
     this.cursorKeys = this.scene.input.keyboard.createCursorKeys();
     this.scene.input.keyboard.on('keydown', (e: KeyboardEvent) => {
       if( e.key === 'ArrowLeft' ) {
-        this.position -= 1.0/12;
+        this.position -= 1.0 / config.tilesPerLayer;
       }
       else if( e.key === 'ArrowRight' ) {
-        this.position += 1.0/12;
+        this.position += 1.0 / config.tilesPerLayer;
       }
     });
   }
