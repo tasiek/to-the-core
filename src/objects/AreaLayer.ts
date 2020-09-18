@@ -64,9 +64,10 @@ export default class AreaLayer extends Phaser.GameObjects.Container {
       Phaser.Actions.SetVisible( this.getAll(), true );
 
       // TODO: scale the whole layer instead?
-      const scale = this.currentDistance > 0 ? 
-        1/this.currentDistance :          // inside layers
-        (1 + (-1*this.currentDistance));  // outside layers
+      // note: for 0..1 it scales up! -> outside layer
+      const scale = this.currentDistance >= 0 ? 
+        1/this.currentDistance :
+        0;                          // animation ended -> hide
 
       Phaser.Actions.SetScale( 
         this.getAll(),  
