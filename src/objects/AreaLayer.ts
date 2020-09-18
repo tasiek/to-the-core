@@ -5,13 +5,15 @@ import { Tile } from './Tile';
 import config from '~/config';
 
 /**
- * 
+ * Represents area layer, 
+ * contains a bunch of tiles, 
+ * draws and animates itself based on current step
  */
 export default class AreaLayer extends Phaser.GameObjects.Container {
   protected tiles: AreaTilesRow;
-  protected distance: number;             // not chaning over time
+  protected distance: number;         // not chaning over time; 
+                                      // kind of index of the layer
   protected step: number = 0;
-
   protected targetDistance: number;   // discrete!
   protected currentDistance: number;  // changing while animating
 
@@ -36,7 +38,8 @@ export default class AreaLayer extends Phaser.GameObjects.Container {
 
     this.tiles.forEach( (tile, i) => {
       const tileObject = new Tile( 
-        this.baseScene, tile, center, this.getRadius(), 
+        this.baseScene, tile, center, 
+        this.baseScene.getDimension(0.3), 
         Phaser.Math.DegToRad(i * tileAngle + 90 - tileAngle/2), 
         Phaser.Math.DegToRad((i+1) * tileAngle + 90 - tileAngle/2), 
       );
@@ -53,7 +56,7 @@ export default class AreaLayer extends Phaser.GameObjects.Container {
 
   distanceUpdated() {
     // only show 10 closest layers
-    // TODO: prettify
+    // TODO: prettify - animate opacity
     if( this.currentDistance > 10 || this.currentDistance < -3 ) {
       Phaser.Actions.SetVisible( this.getAll(), false );
     }
@@ -61,19 +64,16 @@ export default class AreaLayer extends Phaser.GameObjects.Container {
       Phaser.Actions.SetVisible( this.getAll(), true );
 
       // TODO: scale the whole layer instead?
-      const scale = this.currentDistance > 0 ? 1/this.currentDistance : (2 + (-1*this.currentDistance));
+      const scale = this.currentDistance > 0 ? 
+        1/this.currentDistance :          // inside layers
+        (1 + (-1*this.currentDistance));  // outside layers
+
       Phaser.Actions.SetScale( 
         this.getAll(),  
         scale
       );
     }
   }
-
-  getRadius(): number {
-    // radius for 'zero' distance 
-    return this.baseScene.getDimension(0.3);
-  }
-
 
   update( t: number, d: number ): void {
     if( this.targetDistance != this.currentDistance) {
@@ -89,7 +89,6 @@ export default class AreaLayer extends Phaser.GameObjects.Container {
   }
 
   resizeField() {
-    // this.setScale( this.baseScene.getScale(0.1, 256) );
     Phaser.Actions.PropertyValueSet( 
       this.getAll(), 'x', this.baseScene.getCenter().x 
     );
@@ -98,15 +97,9 @@ export default class AreaLayer extends Phaser.GameObjects.Container {
     );
   }
 
-  setDistance( d: number ) {
-    this.distance = d;
-    // this.distanceUpdated();
-  }
-
   setStep( step: number ) {
     this.step = step;
     this.targetDistance = this.distance - this.step;
-    console.log(this.targetDistance, this.currentDistance);
   }
 }
 export { AreaLayer };

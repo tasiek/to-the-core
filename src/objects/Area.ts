@@ -40,16 +40,6 @@ export default class Area extends Phaser.GameObjects.Graphics {
   }
 
   update( t: number, d: number ): void {
-    // TODO: update layers
-    // this.layers.forEach( (layer, i ) => {
-    //   layer.setDistance( i+1 - t/1000/2 );
-      // Phaser.Actions.SetScale( layer.getAll(), 1/(i+1) );
-      // if( i > 0 ) {
-      // const alpha = 1/(i - t/1000 - 2);
-      // Phaser.Actions.SetAlpha( layer.getAll(), alpha >= 0 ? alpha : 1 );
-      // }
-    // });
-
     this.layers.forEach( (layer, i ) => {
       layer.update( t, d );
     });
