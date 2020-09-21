@@ -1,7 +1,7 @@
 export default {
   colors: {
-    bg: 0x042A2B,
-    tile1: 0x5EB1BF
+    bg: 0x1F1300,
+    tile1: 0xFFC15E
   },
   tilesPerLayer: 12
 }

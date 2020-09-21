@@ -25,14 +25,6 @@ export default class Game extends Base
   create(): void {
     this.player = new Player( this );
     this.venue = new Venue( this, new Area0(this) );
-
-    /*
-    this.physics.add.collider( 
-      this.player, 
-      this.venue.getAllColliders(), 
-      this.onPlayerCollision.bind(this) 
-    )
-    */
   }
 
   onPlayerCollision() {

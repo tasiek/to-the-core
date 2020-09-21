@@ -11,8 +11,6 @@ export default class Venue extends Phaser.GameObjects.Graphics {
     super( scene );
     this.area = area;
 
-    // this._tiles = this.area.getTiles();
-
     this.scene.add.existing( this.area );
   }
 
@@ -24,10 +22,6 @@ export default class Venue extends Phaser.GameObjects.Graphics {
     if( this.area ) {
       this.area.resizeField();
     }
-  }
-
-  getAllColliders(): Phaser.GameObjects.GameObject[] {
-    return this.area.getAllColliders();
   }
 }
 export { Venue };
