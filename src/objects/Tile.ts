@@ -4,6 +4,7 @@ import config from '~/config';
 
 
 export default class Tile {
+  protected baseScene: Base;
   
   constructor( scene: Base, 
     graphics: Phaser.GameObjects.Graphics,
@@ -11,12 +12,9 @@ export default class Tile {
     radius: number,
     fromAngle: number, toAngle: number  
   ) {
-    // super( scene, {
-    //   x: center.x,
-    //   y: center.y
-    // } );
+    this.baseScene = scene;
 
-    graphics.lineStyle(30, config.colors.tile1, tile > 0 ? 1 : 0.1);
+    graphics.lineStyle(scene.getDimension(0.02), config.colors.tile1, tile > 0 ? 1 : 0.01);
 
     graphics.beginPath();
     graphics.arc(

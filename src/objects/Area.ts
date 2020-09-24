@@ -10,6 +10,7 @@ export type AreaTheme = 'default' | 'tbd';
  * Base class for area definition
  */
 export default class Area extends Phaser.GameObjects.Graphics {
+  protected baseScene: Base;
   protected tiles: AreaTiles = [];
   protected theme: AreaTheme = 'default';
   protected layers: AreaLayer[] = [];
@@ -21,20 +22,24 @@ export default class Area extends Phaser.GameObjects.Graphics {
   constructor( scene: Base, tiles: AreaTiles ) {
     super( scene );
 
+    this.baseScene = scene;
     this.tiles = tiles;
 
-    // TODO: areate and add all layers
-    this.getTiles().forEach( (row, i) => {
-      this.layers.push( new AreaLayer( scene, row, i+1 ) );
-    });
+    this.createArea();
 
     this.stepsInterval = setInterval( () => {
-      this.stepUp();
+      // this.stepUp();
 
       if( this.isEnded() ) {
         clearInterval( this.stepsInterval );
       }
     }, 1500);
+  }
+
+  createArea(): void {
+    this.getTiles().forEach( (row, i) => {
+      this.layers.push( new AreaLayer( this.baseScene, row, i+1 ) );
+    });
   }
 
   getTiles(): AreaTiles {
@@ -43,14 +48,6 @@ export default class Area extends Phaser.GameObjects.Graphics {
 
   getTheme(): AreaTheme {
     return this.theme;
-  }
-
-  update( t: number, d: number ): void {
-    if( !this.isEnded() ) {
-      this.layers.filter( layer => layer.shouldBeDisplayed() ).forEach( (layer, i ) => {
-        layer.update( t, d );
-      });
-    }
   }
 
   resizeField() {
@@ -65,6 +62,10 @@ export default class Area extends Phaser.GameObjects.Graphics {
     this.stepUpdated();
   }
 
+  getStep(): number {
+    return this.step;
+  }
+
   stepUpdated() {
     // are we at the end yet?
     if( this.isEnded() ) {
@@ -77,7 +78,7 @@ export default class Area extends Phaser.GameObjects.Graphics {
   }
 
   isEnded(): boolean {
-    return this.step >= this.tiles.length + 1;
+    return this.step >= this.layers.length + 1;
   }
 }
 export { Area };

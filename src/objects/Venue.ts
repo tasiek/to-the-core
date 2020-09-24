@@ -15,13 +15,17 @@ export default class Venue extends Phaser.GameObjects.Graphics {
   }
 
   update( t: number, d: number ): void {
-    this.area.update( t, d );
+
   }
 
   resizeField() {
     if( this.area ) {
       this.area.resizeField();
     }
+  }
+
+  getStep(): number {
+    return this.area.getStep();
   }
 }
 export { Venue };

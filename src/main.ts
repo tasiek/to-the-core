@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import EaseMovePlugin from 'phaser3-rex-plugins/plugins/easemove-plugin.js';
+import LRActionControls from './plugins/LRActionControls';
 
 import config from './config';
 
@@ -31,18 +31,15 @@ const gameConfig: Phaser.Types.Core.GameConfig = {
     keyboard: true
   },
   scene: [
-      Boot,
-      Preloader,
-      Game
+    Boot,
+    Preloader,
+    Game
   ],
   plugins: {
-      global: [
-        {
-          key: 'rexEaseMove',
-          plugin: EaseMovePlugin,
-          start: true
-        },
-      ]
+    scene: [
+      { key: 'LRActionControls', plugin: LRActionControls, mapping: 'controls' }
+    ],
+    global: []
   }
 }
 
