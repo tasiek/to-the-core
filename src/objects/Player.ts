@@ -61,9 +61,11 @@ export default class Player extends Phaser.Physics.Arcade.Image
   }
 
   move( dir: -1 | 1 ): void {
+    /*
     if( this.tween && this.tween.isPlaying() ) {
       return;
     }
+    */
 
     const positionDiff = dir / config.tilesPerLayer;
     this.position += positionDiff;

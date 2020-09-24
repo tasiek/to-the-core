@@ -28,6 +28,8 @@ class LRActionControls extends Phaser.Plugins.ScenePlugin {
     this.input.keyboard.on('keydown', (e) => {
       switch (e.keyCode) {
           case Phaser.Input.Keyboard.KeyCodes.SPACE:
+          case Phaser.Input.Keyboard.KeyCodes.UP:
+          case Phaser.Input.Keyboard.KeyCodes.DOWN:
               this.action = true;
               this.events.emit('actiondown');
               break;
@@ -50,6 +52,8 @@ class LRActionControls extends Phaser.Plugins.ScenePlugin {
     this.input.keyboard.on('keyup', (e) => {
       switch (e.keyCode) {
           case Phaser.Input.Keyboard.KeyCodes.SPACE:
+          case Phaser.Input.Keyboard.KeyCodes.UP:
+          case Phaser.Input.Keyboard.KeyCodes.DOWN:
               this.action = false;
               this.events.emit('actionup');
               break;
@@ -113,6 +117,22 @@ class LRActionControls extends Phaser.Plugins.ScenePlugin {
       // this.prefInputMethod = 'gamepad';
     }, this);
 
+
+    const SWIPE_THRESHOLD = 100;
+    this.input.on('pointerup', ( pointer ) => {
+      if( Math.abs(pointer.upX - pointer.downX) < SWIPE_THRESHOLD ) {
+        // this.action = true;
+        this.events.emit('actiondown');
+      }
+      else if( pointer.upX - pointer.downX > SWIPE_THRESHOLD  ) {
+        // this.right = true;
+        this.events.emit('rightdown');
+      }
+      else if( pointer.upX - pointer.downX < SWIPE_THRESHOLD  ) {
+        // this.left = true;
+        this.events.emit('leftdown');
+      }
+    }, this);
   }
 }
 
