@@ -27,6 +27,7 @@ export default class Area extends Phaser.GameObjects.Graphics {
 
     this.createArea();
 
+    /*
     this.stepsInterval = setInterval( () => {
       // this.stepUp();
 
@@ -34,6 +35,11 @@ export default class Area extends Phaser.GameObjects.Graphics {
         clearInterval( this.stepsInterval );
       }
     }, 1500);
+    */
+
+    scene.controls.events.on('actiondown', () => {
+      this.stepUp();
+    });
   }
 
   createArea(): void {
