@@ -25,6 +25,7 @@
 		"typescript": "^3.9.7"
 	},
 	"dependencies": {
+		"parcel": "^1.12.4",
 		"phaser": "^3.24.1",
 		"phaser3-rex-plugins": "^1.1.29"
 	},
