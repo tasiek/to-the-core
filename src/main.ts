@@ -21,7 +21,8 @@ const gameConfig: Phaser.Types.Core.GameConfig = {
   input: {
     gamepad: true,
     touch: true,
-    keyboard: true
+    keyboard: true,
+    mouse: false
   },
   scene: [
     Boot,

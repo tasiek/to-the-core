@@ -80,7 +80,7 @@ export default class Player extends Phaser.Physics.Arcade.Image
     this.tween = this.scene.tweens.add({
       targets: this.pathFollower,
       t: this.position,
-      ease: 'cubic.out', // 'Cubic', 'Elastic', 'Bounce', 'Back'
+      ease: 'Cubic.out', // 'Cubic', 'Elastic', 'Bounce', 'Back'
       duration: 150,
       delay: 0,
       onComplete: () => {
@@ -98,7 +98,7 @@ export default class Player extends Phaser.Physics.Arcade.Image
     this.scene.tweens.add({
       targets: this,
       angle: positionDiff ? `+=${360 * positionDiff}` : 360 * this.position,
-      ease: 'cubic.out',
+      ease: 'Cubic.out',
       duration: 150,
       delay: 0
     });
