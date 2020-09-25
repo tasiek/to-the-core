@@ -47,4 +47,4 @@ const t=Math.PI/180;var n=function(n){return n*t};module.exports=n;
 },{"./Boot":"Sb6D","./Preloader":"ddN1","./Base":"ntLN","./Game":"pEUU"}],"ZCfc":[function(require,module,exports) {
 "use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var e=n(require("phaser")),o=n(require("./plugins/LRActionControls")),i=n(require("./config")),t=require("./scenes");function n(e){return e&&e.__esModule?e:{default:e}}var r={type:e.default.CANVAS,backgroundColor:i.default.colors.bg,scale:{mode:e.default.Scale.NONE,width:window.innerWidth*window.devicePixelRatio,height:window.innerHeight*window.devicePixelRatio,zoom:1/window.devicePixelRatio},input:{gamepad:!0,touch:!0,keyboard:!0,mouse:!1},scene:[t.Boot,t.Preloader,t.Game],plugins:{scene:[{key:"LRActionControls",plugin:o.default,mapping:"controls"}],global:[]},disableContextMenu:!0},d=new e.default.Game(r);exports.default=d;
 },{"phaser":"E66h","./plugins/LRActionControls":"vXed","./config":"C9JJ","./scenes":"LIbJ"}]},{},["ZCfc"], null)
-//# sourceMappingURL=/main.9ff14e6d.js.map
+//# sourceMappingURL=main.9ff14e6d.js.map
