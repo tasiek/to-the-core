@@ -96,7 +96,7 @@ export default class Player extends Phaser.Physics.Arcade.Image
 
   /** getters */
   getPosition(): number {
-    return ((this.position % 1) + 1) % 1;
+    return this.position === 0 ? 0 : ((this.position % 1) + 1) % 1;
   }
 }
 
