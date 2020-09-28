@@ -15,7 +15,6 @@ export default class Area extends Phaser.GameObjects.Graphics {
   protected theme: AreaTheme = 'default';
   protected layers: AreaLayer[] = [];
   protected step: number = 0;
-  protected stepUpStartTime: number = Date.now();
 
   protected stepsInterval: number = 0;
 
@@ -36,10 +35,6 @@ export default class Area extends Phaser.GameObjects.Graphics {
       }
     }, 1500);
     */
-
-    scene.controls.events.on('actiondown', () => {
-      this.stepUp();
-    });
   }
 
   createArea(): void {
@@ -64,12 +59,15 @@ export default class Area extends Phaser.GameObjects.Graphics {
 
   stepUp() {
     this.step++;
-    this.stepUpStartTime = Date.now();
     this.stepUpdated();
   }
 
   getStep(): number {
     return this.step;
+  }
+
+  getCurrentLayer(): AreaTilesRow {
+    return this.tiles[this.step];
   }
 
   stepUpdated() {
@@ -80,6 +78,12 @@ export default class Area extends Phaser.GameObjects.Graphics {
 
     this.layers.forEach( (layer, i ) => {
       layer.setStep( this.step );
+    });
+  }
+
+  onPlayerMoved( pos: number ) {
+    this.layers.forEach( (layer, i ) => {
+      layer.onPlayerMoved( pos );
     });
   }
 

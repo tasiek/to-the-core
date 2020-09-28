@@ -24,8 +24,8 @@ export default class AreaLayer extends Phaser.GameObjects.Graphics {
       x: scene.getCenter().x,
       y: scene.getCenter().y
     } );
-
     this.baseScene = scene;
+
     this.tiles = tiles;
     this.distance = distance;
 
@@ -37,6 +37,15 @@ export default class AreaLayer extends Phaser.GameObjects.Graphics {
     const tileAngle = 360.0 / config.tilesPerLayer;
 
     this.clear();
+    
+    /*
+    this.fillStyle( this.getCurrentFillColor() );
+    this.fillCircle(
+      0, 0,
+      this.baseScene.getDimension(0.3)
+    );
+    */
+
     this.tiles.forEach( (tile, i) => {
       new Tile( 
         this.baseScene, this, tile,
@@ -46,19 +55,42 @@ export default class AreaLayer extends Phaser.GameObjects.Graphics {
       );
     });
     this.scene.add.existing( this );
+    
 
-    // set initial visibility and scale
+    // set initial values
+    this.setX( this.getCurrentCenter().x );
+    this.setY( this.getCurrentCenter().y );
     this.setScale( this.getScale(this.distance) );
     this.setAlpha( this.getAlpha(this.distance) );
-
-    // Phaser.Actions.PlaceOnCircle( this.getAll(), circle, Phaser.Math.DegToRad(-90), Phaser.Math.DegToRad(270) );
   }
+  
 
   getScale( distance: number ): number {
     return distance > 0 ? 1/distance : 5;
   }
+  getCurrentScale(): number {
+    return this.getScale( this.distance - this.step );
+  }
+
   getAlpha( distance: number ): number {
-    return distance > MAX_DISTANCE_VISIBLE || distance <= 0 ? 0 : 1/distance;
+    return distance > MAX_DISTANCE_VISIBLE || distance <= -1 ? 0 : 1/distance;
+  }
+
+  getCurrentCenter( playerPos: number = 0 ): Phaser.Math.Vector2 { // TODO: not an arg
+    return new Phaser.Math.Vector2(
+      this.baseScene.getCenter().x + 
+        8 * Math.cos(2*Math.PI*playerPos-Math.PI/2) * 
+        1/this.getCurrentScale(),
+      this.baseScene.getCenter().y + 
+        8 * Math.sin(2*Math.PI*playerPos-Math.PI/2) * 
+        1/this.getCurrentScale(),
+    );
+  }
+
+  getCurrentFillColor(): number {
+    return Phaser.Display.Color.ValueToColor(0x1F1300)
+      .lighten(10 / this.getCurrentScale())
+      .color;
   }
 
   resizeField() {
@@ -66,7 +98,6 @@ export default class AreaLayer extends Phaser.GameObjects.Graphics {
     this.setY( this.baseScene.getCenter().y );
 
     this.createObjects();
-    // this.distanceUpdated( true );
   }
 
   setStep( step: number ) {
@@ -75,21 +106,26 @@ export default class AreaLayer extends Phaser.GameObjects.Graphics {
 
     this.baseScene.tweens.add({
       targets: this,
-      scaleX: this.getScale(targetDistance),
-      scaleY: this.getScale(targetDistance),
+      scaleX: this.getCurrentScale(),
+      scaleY: this.getCurrentScale(),
       alpha: this.getAlpha(targetDistance),
       ease: 'Quad.easeInOut',
       duration: 300,
       delay: 0
     });
-    if( targetDistance < 0 ) {
+    if( targetDistance < -1 ) {
       this.setVisible( false );
     }
-    
   }
 
-  shouldBeDisplayed(): boolean {
-    return this.distance - this.step > -1 && this.distance - this.step < MAX_DISTANCE_VISIBLE;
+  onPlayerMoved( pos: number ): void {
+    this.baseScene.tweens.add({
+      targets: this,
+      x: this.getCurrentCenter(pos).x,
+      y: this.getCurrentCenter(pos).y,
+      duration: 300,
+      delay: 0
+    });
   }
 }
 export { AreaLayer };

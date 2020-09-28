@@ -1,20 +1,21 @@
 {
-	"name": "phaser3-parcel-template",
-	"version": "1.0.0",
-	"description": "A template project for Phaser3 using Parceljs",
+	"name": "to-the-core",
+	"version": "0.0.1",
+	"description": "Phaser3 game",
 	"scripts": {
 		"start": "parcel src/index.html -p 8800",
 		"build": "parcel build src/index.html --out-dir dist --public-url ./",
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"lint": "eslint ./src --ext .js,.jsx,.ts,.tsx"
+		"lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
+		"push-dist": "git subtree push --prefix dist origin dev-dist"
 	},
 	"author": "supertommy",
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/ourcade/phaser3-parcel-template.git"
+		"url": "https://github.com/tasiek/to-the-core.git"
 	},
-	"homepage": "https://github.com/ourcade/phaser3-parcel-template",
+	"homepage": "https://github.com/tasiek/to-the-core",
 	"devDependencies": {
 		"@typescript-eslint/eslint-plugin": "^2.34.0",
 		"@typescript-eslint/parser": "^2.34.0",
@@ -26,7 +27,6 @@
 	},
 	"dependencies": {
 		"parcel": "^1.12.4",
-		"parcel-plugin-html-root-syntax": "0.0.3",
 		"phaser": "^3.24.1",
 		"phaser3-rex-plugins": "^1.1.29"
 	},

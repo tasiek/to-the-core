@@ -7,6 +7,7 @@ import config from '~/config';
 
 export default class Player extends Phaser.Physics.Arcade.Image
 {
+  public events: Phaser.Events.EventEmitter = new Phaser.Events.EventEmitter();
   protected cursorKeys?: Phaser.Types.Input.Keyboard.CursorKeys;
 
   protected position: number = 0.0;                 // current position (0..1)
@@ -20,7 +21,6 @@ export default class Player extends Phaser.Physics.Arcade.Image
     this.scene.add.existing( this );
     this.baseScene = scene;
 
-    this.setupUserInput();
     this.initObjects();
   }
 
@@ -42,34 +42,17 @@ export default class Player extends Phaser.Physics.Arcade.Image
 
     this.updateScale();
   }
+
   updateScale(): void {
     this.setScale( this.baseScene.getScale(0.1, 256) );
   }
 
-
-  /**
-   * Sets up user input listeners
-   */
-  setupUserInput(): void {
-    this.scene.controls.events.on('leftdown', () => {
-      this.move( 1 );
-    });
-
-    this.scene.controls.events.on('rightdown', () => {
-      this.move( -1 );
-    });
-  }
-
   move( dir: -1 | 1 ): void {
-    /*
-    if( this.tween && this.tween.isPlaying() ) {
-      return;
-    }
-    */
-
     const positionDiff = dir / config.tilesPerLayer;
     this.position += positionDiff;
     this.updateDraw( positionDiff );
+
+    this.events.emit('moved', this.position);
   }
 
 
@@ -98,7 +81,7 @@ export default class Player extends Phaser.Physics.Arcade.Image
     this.scene.tweens.add({
       targets: this,
       angle: positionDiff ? `+=${360 * positionDiff}` : 360 * this.position,
-      ease: 'Cubic.out',
+      ease: 'Quad.easeInOut',
       duration: 150,
       delay: 0
     });
@@ -107,7 +90,13 @@ export default class Player extends Phaser.Physics.Arcade.Image
   resizeField() {
     this.initObjects();
     this.updateScale();
-    this.updateDraw();
+    // this.updateDraw();
+  }
+
+
+  /** getters */
+  getPosition(): number {
+    return ((this.position % 1) + 1) % 1;
   }
 }
 

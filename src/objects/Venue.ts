@@ -27,5 +27,13 @@ export default class Venue extends Phaser.GameObjects.Graphics {
   getStep(): number {
     return this.area.getStep();
   }
+
+  getArea(): Area {
+    return this.area;
+  }
+
+  onPlayerMoved( pos: number ): void {
+    this.area.onPlayerMoved( pos );
+  }
 }
 export { Venue };
