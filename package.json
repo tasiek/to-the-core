@@ -4,7 +4,7 @@
 	"description": "Phaser3 game",
 	"scripts": {
 		"start": "parcel src/index.html -p 8800",
-		"build": "parcel build src/index.html --out-dir dist --public-url ./",
+		"build": "parcel build src/index.html --out-dir dist --public-url https://tasiek.github.io/to-the-core/",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
 		"push-dist": "git subtree push --prefix dist origin dev-dist"
