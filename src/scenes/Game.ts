@@ -61,7 +61,7 @@ export default class Game extends Base
     if( !areaLayer || typeof playerPos === typeof undefined ) {
       return false;
     }
-    const tile = areaLayer[ Math.round(playerPos*12) ];
+    const tile = areaLayer[ playerPos ];
 
     if( tile !== 0 ) {
       this.cameras.main.shake(200, 0.02);

@@ -10,7 +10,8 @@ export default class Player extends Phaser.Physics.Arcade.Image
   public events: Phaser.Events.EventEmitter = new Phaser.Events.EventEmitter();
   protected cursorKeys?: Phaser.Types.Input.Keyboard.CursorKeys;
 
-  protected position: number = 0.0;                 // current position (0..1)
+  protected position: number = 0;                 // current position (0..tilesPerLayer)
+  protected positionTotal: number = 0;            // total position, not wrapped (-Inf..Inf), only used for animation
   protected baseScene: Base;
 
   protected pathFollower: PathFollower;
@@ -36,7 +37,7 @@ export default class Player extends Phaser.Physics.Arcade.Image
     )
     this.pathFollower = new PathFollower(this, {
       path: path,           // path object
-      t: this.position,     // t: 0~1
+      t: this.getPositionPerc(),     // t: 0~1
       rotateToPath: false
     });
 
@@ -48,11 +49,12 @@ export default class Player extends Phaser.Physics.Arcade.Image
   }
 
   move( dir: -1 | 1 ): void {
-    const positionDiff = dir / config.tilesPerLayer;
-    this.position += positionDiff;
-    this.updateDraw( positionDiff );
+    const positionDiff = dir;
+    this.positionTotal += positionDiff;
+    this.position = Phaser.Math.Wrap( this.positionTotal, 0, config.tilesPerLayer );
+    this.updateDraw( positionDiff / config.tilesPerLayer );
 
-    this.events.emit('moved', this.position);
+    this.events.emit('moved', this.getPositionPerc());
   }
 
 
@@ -60,10 +62,12 @@ export default class Player extends Phaser.Physics.Arcade.Image
    * Draws itself based on current position
    */
   updateDraw( positionDiff: number = 0 ) {
+    // around
+    // note: we use total position, to properly animate object pos on path
     this.tween = this.scene.tweens.add({
       targets: this.pathFollower,
-      t: this.position,
-      ease: 'Cubic.out', // 'Cubic', 'Elastic', 'Bounce', 'Back'
+      t: this.getPositionTotalPerc(),
+      ease: 'Quad.easeInOut', // 'Cubic', 'Elastic', 'Bounce', 'Back'
       duration: 150,
       delay: 0,
       onComplete: () => {
@@ -78,9 +82,12 @@ export default class Player extends Phaser.Physics.Arcade.Image
         */
       }
     });
+
+    // rotate
+    // not we use pos difference, as angle is wrapped automatically
     this.scene.tweens.add({
       targets: this,
-      angle: positionDiff ? `+=${360 * positionDiff}` : 360 * this.position,
+      angle: positionDiff ? `+=${360 * positionDiff}` : 360 * this.getPositionTotalPerc(),
       ease: 'Quad.easeInOut',
       duration: 150,
       delay: 0
@@ -96,7 +103,15 @@ export default class Player extends Phaser.Physics.Arcade.Image
 
   /** getters */
   getPosition(): number {
-    return this.position === 0 ? 0 : ((this.position % 1) + 1) % 1;
+    return this.position;
+  }
+
+  getPositionPerc(): number {
+    return this.position / config.tilesPerLayer;
+  }
+
+  getPositionTotalPerc(): number {
+    return this.positionTotal / config.tilesPerLayer;
   }
 }
 
