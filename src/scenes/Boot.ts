@@ -11,7 +11,6 @@ class Boot extends Phaser.Scene {
       // ...
 
       window.addEventListener('resize', this.resize.bind(this));
-
       this.scene.start('preloader');
   }
 

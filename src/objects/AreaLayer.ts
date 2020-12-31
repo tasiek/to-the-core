@@ -26,6 +26,7 @@ export default class AreaLayer extends Phaser.GameObjects.Graphics {
     } );
     this.baseScene = scene;
 
+
     this.tiles = tiles;
     this.distance = distance;
 

@@ -1,3 +1,6 @@
+// based on 
+// https://github.com/Quinten/platformer-base/blob/master/src/plugins/SimplePlatformerControls.js
+
 import Phaser from "phaser";
 
 export type ControlsInputMethods = 'keyboard' | 'gamepad' | 'touch';

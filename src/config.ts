@@ -3,5 +3,8 @@ export default {
     bg: 0x1F1300,
     tile1: 0xFFC15E
   },
-  tilesPerLayer: 12
+  tilesPerLayer: 12,
+  scenesTransition: {
+    time: 1000
+  }
 }

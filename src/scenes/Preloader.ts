@@ -26,11 +26,14 @@ class Preloader extends Phaser.Scene {
       // ...
       this.load.image('player-1', 'assets/images/ShipX_0002_Package.png');
 
+      // music
+      this.load.audio('drone1', 'assets/music/drone1.mp3');
+
   }
 
   create ()
   {
-    this.scene.start('game');
+    this.scene.start('intro');
   }
 
 }

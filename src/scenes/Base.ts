@@ -1,10 +1,20 @@
 import Phaser from 'phaser';
+import config from '~/config';
 
 export default class Base extends Phaser.Scene
 {
-	constructor( config: string | Phaser.Types.Scenes.SettingsConfig )
-	{
+  private nextStarting: boolean = false;
+
+	constructor( config: string | Phaser.Types.Scenes.SettingsConfig ) {
     super( config );
+  }
+
+  /**
+   * Common for all scenes - fade in
+   */
+  create() {
+    const c = Phaser.Display.Color.ColorToRGBA(config.colors.bg);
+    this.cameras.main.flash(config.scenesTransition.time, c.r, c.g, c.b);
   }
   
   /**
@@ -61,6 +71,22 @@ export default class Base extends Phaser.Scene
       this.cameras.main.width, 
       this.cameras.main.height 
     )
+  }
+
+  /**
+   * Start a scene with out effect
+   */
+  startScene( sceneName: string ): void {
+    if (this.nextStarting) {
+      return;
+    }
+    this.nextStarting = true;
+    this.cameras.main.once('camerafadeoutcomplete', () => {
+        this.scene.start(sceneName);
+    }, this);
+
+    const c = Phaser.Display.Color.ColorToRGBA(config.colors.bg);
+    this.cameras.main.fadeOut(config.scenesTransition.time, c.r, c.g, c.b);
   }
 }
 
