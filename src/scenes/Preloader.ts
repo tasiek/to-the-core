@@ -2,9 +2,8 @@ import Base from "~/scenes/Base";
 
 class Preloader extends Base {
 
-  constructor ()
-  {
-      super({ key: 'preloader' });
+  constructor () {
+      super('preloader');
   }
 
   preload ()

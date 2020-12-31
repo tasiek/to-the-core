@@ -26,24 +26,23 @@ export default class Intro extends Base {
         color: "#FFFFFF"
       }
     )
-    .setAlpha(0.5)
     .setOrigin(0.5)
+    .setAlpha(0.5)
     .setScale(0.8)
     ;
 
     this.tweens.add({
       targets: this.textTitle,
-      ease: 'Quad.easeOut',
-      duration: 6000,
-      delay: 0,
       props: {
         scale: {
           value: 1.0,
-          duration: 5000
+          duration: 3000,
+          ease: 'Quad.easeOut'
         },
         alpha: {
-          value: 0.8,
-          duration: 800
+          value: 1.0,
+          duration: 300,
+          ease: 'Quad.easeOut'
         }
       }
     });
@@ -52,17 +51,14 @@ export default class Intro extends Base {
   hideObjects() {
     this.tweens.add({
       targets: this.textTitle,
-      ease: 'Quad.easeIn',
       delay: 0,
       props: {
         scale: {
-          value: 2.0,
-          duration: config.scenesTransition.time
-        },
-        alpha: {
-          value: 0.0,
-          duration: config.scenesTransition.time
+          value: '*=2',
+          duration: config.scenesTransition.time * 2.0,
+          ease: 'Quad.easeOut'
         }
+        // don't need to animate alpha - scene faded out
       }
     });
   }
