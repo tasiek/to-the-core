@@ -26,7 +26,7 @@ export default class Intro extends Base {
         color: "#FFFFFF"
       }
     )
-    .setOrigin(0.5)
+    .setOrigin(0.5, 0.5)
     .setAlpha(0.5)
     .setScale(0.8)
     ;

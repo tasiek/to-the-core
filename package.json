@@ -7,7 +7,7 @@
 		"build": "parcel build src/index.html --out-dir dist --public-url https://tasiek.github.io/to-the-core/",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
-    "push-dist": "git subtree push --prefix dist origin dev-dist",
+    "dist": "git subtree push --prefix dist origin dev-dist",
     "publish": "npm run build && npm run push-dist"
 	},
 	"author": "supertommy",

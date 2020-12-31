@@ -44,7 +44,11 @@ const gameConfig: Phaser.Types.Core.GameConfig = {
   audio: {
       // disableWebAudio: true
   },
-  disableContextMenu: true
+  disableContextMenu: true,
+  render: {
+    // antialiasGL: true,
+    // antialias: true
+  }
 }
 
 export default new Phaser.Game(gameConfig)
