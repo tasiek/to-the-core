@@ -10,7 +10,7 @@ export default class Intro extends Base {
     super.create();
     this.createIntroText();
 
-    this.controls.events.once('actionup', this.tapUp, this);
+    this.controls.events.once('actiondown', this.tapUp, this);
   }
 
   createIntroText() {

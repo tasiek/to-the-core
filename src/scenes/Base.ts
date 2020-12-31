@@ -14,7 +14,7 @@ export default class Base extends Phaser.Scene
    */
   create() {
     const c = Phaser.Display.Color.ColorToRGBA(config.colors.bg);
-    this.cameras.main.flash(config.scenesTransition.time, c.r, c.g, c.b);
+    this.cameras.main.fadeIn(config.scenesTransition.time, c.r, c.g, c.b);
   }
   
   /**
