@@ -18,6 +18,8 @@ export default class GameTimer extends Base {
   }
 
   create() {
+    super.create();
+
     // const gameScene = this.scene.get('game') as Game;
     this.initGraphics();
     this.startTimer();
