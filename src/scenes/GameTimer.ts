@@ -1,6 +1,7 @@
 import { Base, Game } from '~/scenes';
+import config from '~/config';
 
-const FLOW_ANIM_DIFF = 0.02;
+const FLOW_ANIM_DIFF = 0.0; //0.02;
 export default class GameTimer extends Base {
 
   timer: number = 0;
@@ -66,7 +67,8 @@ export default class GameTimer extends Base {
     this.graphics.fillStyle(0x000000);
     this.graphics.fillRect(0, 0, this.getX(1), this.getY(1));
 
-    this.initTimerGraphicsAnimation();
+    // this.initTimerGraphicsAnimation();
+    this.initParticles();
   }
 
   initTimerGraphicsAnimation(): void {
@@ -94,6 +96,22 @@ export default class GameTimer extends Base {
       repeat: -1, // -1: infinity
       yoyo: true
     });
+  }
+
+  initParticles() {
+    const particles = this.add.particles('particle-1');
+    const shape = new Phaser.Geom.Circle(this.getX(0.5), this.getY(0.5), this.getDimension(0.8));
+    const emitter = particles.createEmitter({
+      frequency:  20, 
+      lifespan:   { min: 500, max: 1500 },
+      alpha:      { start: 1, end: 0, ease: 'Quad.easeIn' },
+      speed:      { min: 30, max: 150 },
+      scale:      { min: 1, max: 2 },
+      emitZone:  { type: 'edge', source: shape, quantity: 40  },
+      maxParticles: 400,
+      quantity: 5
+    });
+
   }
 
   startTimer() {

@@ -7,5 +7,8 @@ export default {
   tilesPerLayer: 12,
   scenesTransition: {
     time: 800
+  },
+  fonts: {
+    default: 'Megrim'
   }
 }

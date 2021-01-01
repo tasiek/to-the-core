@@ -1,4 +1,5 @@
 import Base from "~/scenes/Base";
+import config from "~/config";
 
 class Preloader extends Base {
 
@@ -26,9 +27,17 @@ class Preloader extends Base {
       // Load assets here
       // ...
       this.load.image('player-1', 'assets/images/ShipX_0002_Package.png');
+      this.load.image('particle-1', 'assets/images/particle1.png');
 
       // music
       this.load.audio('drone1', 'assets/music/drone1.mp3');
+
+      // font
+      this.load.rexWebFont({
+        google: {
+            families: Object.values(config.fonts)
+        },
+    });
 
   }
 

@@ -19,9 +19,9 @@ export default class Intro extends Base {
   createObjects() {
     this.textTitle = this.add.text(
       this.getX(0.5), this.getY(0.5), 
-      'To the core',  
+      'To the Core',  
       { 
-        fontFamily: 'Megrim, Century Gothic, CenturyGothic, AppleGothic, sans-serif', 
+        fontFamily: `${config.fonts.default}, sans-serif`, 
         fontSize: `${this.getDimension(0.07)}px`, 
         color: "#FFFFFF"
       }

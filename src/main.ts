@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import LRActionControls from './plugins/LRActionControls';
 import Ambient from './plugins/Ambient';
+import WebFontLoaderPlugin from 'phaser3-rex-plugins/plugins/webfontloader-plugin.js';
 
 import config from './config';
 
@@ -39,7 +40,11 @@ const gameConfig: Phaser.Types.Core.GameConfig = {
       { key: 'LRActionControls', plugin: LRActionControls, mapping: 'controls' },
       { key: 'Ambient', plugin: Ambient, mapping: 'ambient' }
     ],
-    global: []
+    global: [{
+      key: 'rexWebFontLoader',
+      plugin: WebFontLoaderPlugin,
+      start: true
+    }],
   },
   audio: {
       // disableWebAudio: true
