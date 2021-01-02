@@ -101,7 +101,6 @@ export default class GameTimer extends Base {
   initParticles() {
     const particles = this.add.particles('particle-1');
     const shape = new Phaser.Geom.Circle(this.getX(0.5), this.getY(0.5), this.getDimension(0.8));
-    // const s = this.getDimension(1);  // TODO: particle scale based on resolution
     const emitter = particles.createEmitter({
       moveToX: this.getX(0.5),
       moveToY: this.getY(0.5),
@@ -109,8 +108,8 @@ export default class GameTimer extends Base {
       lifespan:   { min: 500, max: 1500 },
       alpha:      { start: 1, end: 0, ease: 'Quad.easeIn' },
       speed:      100,
-      scale:      { min: 1, max: 2 },
-      emitZone:  { type: 'edge', source: shape, quantity: 40  },
+      scale:      { min: this.getScale(0.15, 128), max: this.getScale(0.20, 128) },
+      emitZone:  { type: 'edge', source: shape, quantity: 50  },
       maxParticles: 400,
       quantity: 5,
       maxVelocityX: 100,
