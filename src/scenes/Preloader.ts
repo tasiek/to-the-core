@@ -28,6 +28,7 @@ class Preloader extends Base {
       // ...
       this.load.image('player-1', 'assets/images/ShipX_0002_Package.png');
       this.load.image('particle-1', 'assets/images/particle1.png');
+      this.load.image('mask-black', 'assets/images/mask-black-1-5.png');  // circle:whole = 1:5
 
       // music
       this.load.audio('drone1', 'assets/music/drone1.mp3');

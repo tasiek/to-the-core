@@ -14,7 +14,7 @@ import {
 } from './scenes';
 
 const gameConfig: Phaser.Types.Core.GameConfig = {
-  type: Phaser.WEBGL,
+  type: Phaser.CANVAS,
   backgroundColor: config.colors.bg,
   scale: {
     mode: Phaser.Scale.NONE, // we will resize the game with our own code (see Boot.js)
@@ -52,7 +52,7 @@ const gameConfig: Phaser.Types.Core.GameConfig = {
   disableContextMenu: true,
   render: {
     // antialiasGL: true,
-    // antialias: true
+    antialias: true
   }
 }
 

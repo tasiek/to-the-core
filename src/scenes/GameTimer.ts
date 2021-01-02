@@ -27,7 +27,7 @@ export default class GameTimer extends Base {
   }
 
   initGraphics() {
-    this.initTimerText();
+    // this.initTimerText();
     this.initTimerGraphics();
   }
 
@@ -43,6 +43,28 @@ export default class GameTimer extends Base {
   }
 
   initTimerGraphics(): void {
+
+    // this.initMaskGraphics();
+    // this.initTimerGraphicsAnimation();
+    this.initMaskGraphicsImage();
+    this.initParticles();
+  }
+
+  initMaskGraphicsImage(): void {
+    const WHOLE_TO_CIRCLE = 5;
+
+    this.add.image(
+      this.getX(0.5),
+      this.getY(0.5),
+      'mask-black'
+    )
+    .setScale(
+      this.getScale((1 + 0.45) * WHOLE_TO_CIRCLE, 1000)
+    )
+    ;
+  }
+
+  initMaskGraphics(): void {
 
     // the actual animated shape (used as a mask)
     this.shape = this.make.graphics({
@@ -66,9 +88,6 @@ export default class GameTimer extends Base {
     this.graphics.setMask(mask);
     this.graphics.fillStyle(0x000000);
     this.graphics.fillRect(0, 0, this.getX(1), this.getY(1));
-
-    // this.initTimerGraphicsAnimation();
-    this.initParticles();
   }
 
   initTimerGraphicsAnimation(): void {
@@ -104,13 +123,13 @@ export default class GameTimer extends Base {
     const emitter = particles.createEmitter({
       moveToX: this.getX(0.5),
       moveToY: this.getY(0.5),
-      frequency:  20, 
+      frequency:  50, 
       lifespan:   { min: 500, max: 1500 },
       alpha:      { start: 1, end: 0, ease: 'Quad.easeIn' },
       speed:      100,
       scale:      { min: this.getScale(0.15, 128), max: this.getScale(0.20, 128) },
       emitZone:  { type: 'edge', source: shape, quantity: 50  },
-      maxParticles: 400,
+      maxParticles: 200,
       quantity: 5,
       maxVelocityX: 100,
       maxVelocityY: 100
