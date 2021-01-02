@@ -123,16 +123,16 @@ export default class GameTimer extends Base {
     const emitter = particles.createEmitter({
       moveToX: this.getX(0.5),
       moveToY: this.getY(0.5),
+      lifespan:   { min: 500, max: 3000 },
       frequency:  50, 
-      lifespan:   { min: 500, max: 1500 },
-      alpha:      { start: 1, end: 0, ease: 'Quad.easeIn' },
-      speed:      100,
-      scale:      { min: this.getScale(0.15, 128), max: this.getScale(0.20, 128) },
+      speed:      50,
+      maxVelocityX: 50,
+      maxVelocityY: 50,
       emitZone:  { type: 'edge', source: shape, quantity: 50  },
-      maxParticles: 200,
       quantity: 5,
-      maxVelocityX: 100,
-      maxVelocityY: 100
+      maxParticles: 500,
+      alpha:      { start: 1, end: 0, ease: 'Quad.easeIn' },
+      scale:      { min: this.getScale(0.15, 128), max: this.getScale(0.20, 128) },
     });
 
   }
