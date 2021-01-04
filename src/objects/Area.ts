@@ -1,5 +1,6 @@
 import { Base } from '~/scenes';
 import { AreaLayer } from './AreaLayer';
+import config from '~/config';
 
 export type AreaTile = number;
 export type AreaTilesRow = AreaTile[];
@@ -61,6 +62,25 @@ export default class Area extends Phaser.GameObjects.Graphics {
   stepUp() {
     this.step++;
     this.stepUpdated();
+    
+    this.baseScene.tweens.addCounter({
+      from: 0,
+      to: 0.15,
+      duration: 100,
+      onUpdate: (tween: Phaser.Tweens.Tween) => {
+        const tint = Phaser.Display.Color.Interpolate.ColorWithColor(
+          Phaser.Display.Color.ValueToColor(config.colors.bg),
+          Phaser.Display.Color.ValueToColor(config.colors.tile1),
+          1,
+          tween.getValue()
+        );
+        this.baseScene.cameras.main.setBackgroundColor( 
+          tint
+        ); 
+      }, 
+      ease: 'Quad.easeInOut',
+      yoyo: true
+    });
   }
 
   getStep(): number {
