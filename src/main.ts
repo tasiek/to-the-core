@@ -14,6 +14,8 @@ import {
 } from './scenes';
 
 const gameConfig: Phaser.Types.Core.GameConfig = {
+  title: 'To the Core',
+
   type: Phaser.CANVAS,
   backgroundColor: config.colors.bg,
   scale: {
@@ -53,6 +55,11 @@ const gameConfig: Phaser.Types.Core.GameConfig = {
   render: {
     // antialiasGL: true,
     antialias: true
+  },
+  fps: {
+    min: 24,
+    target: 60,
+    smoothStep: true
   }
 }
 

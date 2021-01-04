@@ -41,6 +41,7 @@ export default class Area extends Phaser.GameObjects.Graphics {
     this.getTiles().forEach( (row, i) => {
       this.layers.push( new AreaLayer( this.baseScene, row, i+1 ) );
     });
+
   }
 
   getTiles(): AreaTiles {

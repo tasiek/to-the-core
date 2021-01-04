@@ -1,34 +1,38 @@
 import { Base, Game } from '~/scenes';
 import config from '~/config';
 
+const MASK_WHOLE_TO_CIRCLE = 5;
 const FLOW_ANIM_DIFF = 0.0; //0.02;
 export default class GameTimer extends Base {
 
   timer: number = 0;
   timeText?: Phaser.GameObjects.Text;
-
   timerEvent?: Phaser.Time.TimerEvent;
-  shape?: Phaser.GameObjects.Graphics;
-  graphics?: Phaser.GameObjects.Graphics;
-  // gameScene?: Phaser.Scene;
+
+  particlesEmitterShape?: Phaser.Geom.Circle;
+  particlesEmitter?: Phaser.GameObjects.Particles.ParticleEmitter;
+  maskImage?: Phaser.GameObjects.Image;
+
+  maskShapeMask?: Phaser.GameObjects.Graphics;
+  maskShapeGraphics?: Phaser.GameObjects.Graphics;
 
 	constructor() {
     super('game_timer');
     
-    this.timer = 10;
+    this.timer = 3;
   }
 
   create() {
     super.create();
 
-    // const gameScene = this.scene.get('game') as Game;
     this.initGraphics();
-    this.startTimer();
+    // this.startTimer();
   }
 
   initGraphics() {
     // this.initTimerText();
     this.initTimerGraphics();
+    this.updateScales();
   }
 
 
@@ -43,7 +47,6 @@ export default class GameTimer extends Base {
   }
 
   initTimerGraphics(): void {
-
     // this.initMaskGraphics();
     // this.initTimerGraphicsAnimation();
     this.initMaskGraphicsImage();
@@ -51,49 +54,101 @@ export default class GameTimer extends Base {
   }
 
   initMaskGraphicsImage(): void {
-    const WHOLE_TO_CIRCLE = 5;
-
-    this.add.image(
-      this.getX(0.5),
-      this.getY(0.5),
+    this.maskImage = this.add.image(
+      0, 0,
       'mask-black'
-    )
-    .setScale(
-      this.getScale((1 + 0.45) * WHOLE_TO_CIRCLE, 1000)
     )
     ;
   }
 
+  initParticles() {
+    const particles = this.add.particles('particle-1');
+    this.particlesEmitterShape = new Phaser.Geom.Circle();
+    this.particlesEmitter = particles.createEmitter({
+      moveToX: this.getX(0.5),
+      moveToY: this.getY(0.5),
+      lifespan:   { min: 500, max: 3000 },
+      frequency:  50, 
+      speed:      50,
+      maxVelocityX: 50,
+      maxVelocityY: 50,
+      quantity: 5,
+      maxParticles: 500,
+      alpha:      { start: 1, end: 0, ease: 'Quad.easeIn' },
+    });
+  }
+
+  updateScales(): void {
+    const DISTANCE_PER_STEP = 0.1;
+
+    this.maskImage
+      ?.setScale(
+        this.getScale((0.9 + this.timer * DISTANCE_PER_STEP) * MASK_WHOLE_TO_CIRCLE, 1000)
+      )
+      ?.setPosition(
+        this.getX(0.5),
+        this.getY(0.5)
+      )
+    ;
+
+    this.particlesEmitterShape?.setTo( 
+      this.getX(0.5), this.getY(0.5), 
+      this.getDimension(0.5 + this.timer * DISTANCE_PER_STEP/2) 
+    );
+    this.particlesEmitter
+      ?.setScale({ 
+        min: this.getScale(0.15, 128), 
+        max: this.getScale(0.20, 128) 
+      })
+    ;
+
+    this.particlesEmitterShape ? 
+      this.particlesEmitter?.setEmitZone(
+        { type: 'edge', source: this.particlesEmitterShape, quantity: 50  }
+      ).killAll() : null;
+  }
+
+  resizeField() {
+    this.updateScales();
+  }
+
+  /* --------------- */
+
   initMaskGraphics(): void {
 
     // the actual animated shape (used as a mask)
-    this.shape = this.make.graphics({
-      x: this.getX(0.5 + FLOW_ANIM_DIFF), 
-      y: this.getY(0.5 + FLOW_ANIM_DIFF)
-    });
-    this.shape.fillStyle(0xFFFFFF);
-    this.shape.beginPath();
-    this.shape.fillCircle(0, 0, this.getDimension(0.75))
-    this.shape.setBlendMode(Phaser.BlendModes.DIFFERENCE);
-    const mask = this.shape.createGeometryMask();
-    mask.setInvertAlpha(true);
+    this.maskShapeMask = this.make
+      .graphics({
+        x: this.getX(0.5 + FLOW_ANIM_DIFF), 
+        y: this.getY(0.5 + FLOW_ANIM_DIFF)
+      })
+      .fillStyle(0xFFFFFF)
+      .beginPath()
+      .fillCircle(0, 0, this.getDimension(0.75))
+      .setBlendMode(Phaser.BlendModes.DIFFERENCE)
+    ;
+    const mask = this.maskShapeMask.createGeometryMask()
+      .setInvertAlpha(true)
+    ;
 
     // const circle = new Phaser.Geom.Circle(400, 300, 160);
 
     // filler to use mask on 
-    this.graphics = this.add.graphics({
-      x: 0,
-      y: 0
-    });
-    this.graphics.setMask(mask);
-    this.graphics.fillStyle(0x000000);
-    this.graphics.fillRect(0, 0, this.getX(1), this.getY(1));
+    this.maskShapeGraphics = this.add
+      .graphics({
+        x: 0,
+        y: 0
+      })
+      .setMask(mask)
+      .fillStyle(0x000000)
+      .fillRect(0, 0, this.getX(1), this.getY(1))
+    ;
   }
 
   initTimerGraphicsAnimation(): void {
 
     this.tweens.add({
-      targets: this.shape,
+      targets: this.maskShapeGraphics,
       props: {
         scale: {
           value: 1.1,
@@ -115,26 +170,6 @@ export default class GameTimer extends Base {
       repeat: -1, // -1: infinity
       yoyo: true
     });
-  }
-
-  initParticles() {
-    const particles = this.add.particles('particle-1');
-    const shape = new Phaser.Geom.Circle(this.getX(0.5), this.getY(0.5), this.getDimension(0.8));
-    const emitter = particles.createEmitter({
-      moveToX: this.getX(0.5),
-      moveToY: this.getY(0.5),
-      lifespan:   { min: 500, max: 3000 },
-      frequency:  50, 
-      speed:      50,
-      maxVelocityX: 50,
-      maxVelocityY: 50,
-      emitZone:  { type: 'edge', source: shape, quantity: 50  },
-      quantity: 5,
-      maxParticles: 500,
-      alpha:      { start: 1, end: 0, ease: 'Quad.easeIn' },
-      scale:      { min: this.getScale(0.15, 128), max: this.getScale(0.20, 128) },
-    });
-
   }
 
   startTimer() {
@@ -159,10 +194,6 @@ export default class GameTimer extends Base {
 
   update() {
     this.timeText?.setText( `${this.timer || 0}` )
-  }
-
-  resizeField() {
-
   }
 }
 
