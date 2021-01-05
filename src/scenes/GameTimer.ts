@@ -44,9 +44,10 @@ export default class GameTimer extends Base {
       duration: this.timer,
       
       onUpdate: (tween: Phaser.Tweens.Tween) => {
-        this.timer = tween.getValue();
-        if( tween.getValue() % 1000 <= 10  ) {  // optimize - only update once per second
+        if( Math.abs(this.timer - tween.getValue()) >= 1000  ) {  // optimize - only update once per second
+          this.timer = tween.getValue();
           this.updateScales();
+          console.log(tween.getValue());
         }
       },
       // time's over!
@@ -128,6 +129,7 @@ export default class GameTimer extends Base {
     ;
 
     // just update emitter
+    this.particlesEmitter?.pause();
     this.particlesEmitterShape && 
       this.particlesEmitter?.setEmitZone(
         { 
@@ -136,6 +138,7 @@ export default class GameTimer extends Base {
           quantity: this.particlesConfig.quantity
         }
       );
+      this.particlesEmitter?.resume();
 
   }
 
