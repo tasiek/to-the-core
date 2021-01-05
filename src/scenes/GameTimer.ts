@@ -5,14 +5,14 @@ const MASK_WHOLE_TO_CIRCLE = 5;
 export default class GameTimer extends Base {
 
   particlesConfig = {
-    quantity: 30,   // number of particles on circle
+    quantity: 50,   // number of particles on circle
     speed: 80,      // lower -> slower (px/sec?)
     frequency: 250, // delay between particles shoot
     lifespan: {     // time of life for single particle - random
       min: 500,
       max: 1500
     },
-    maxParticles: 200
+    maxParticles: 400
   };
 
   timer: number = 0;
@@ -28,14 +28,14 @@ export default class GameTimer extends Base {
 	constructor() {
     super('game_timer');
     
-    this.timer = 20 * 1000;
+    this.timer = 5 * 1000;
   }
 
   create() {
     super.create();
 
     this.initGraphics();
-    this.startTimer();
+    // this.startTimer();
   }
 
   startTimer() {
@@ -99,7 +99,7 @@ export default class GameTimer extends Base {
 
   updateScales(): void {
     const DISTANCE_PER_STEP = 0.05;
-    const EMITTER_BASE_DIST = 0.6;
+    const EMITTER_BASE_DIST = 0.55;
 
     const t = this.timer / 1000;
 
@@ -124,8 +124,8 @@ export default class GameTimer extends Base {
       // particle size with some randomness
       // + based on emitter radius: further -> larger
       ?.setScale({ 
-        min: this.getScale(0.4, 128) + t * DISTANCE_PER_STEP, 
-        max: this.getScale(0.5, 128) + t * DISTANCE_PER_STEP
+        min: this.getScale(0.25, 128) + t * DISTANCE_PER_STEP, 
+        max: this.getScale(0.3, 128) + t * DISTANCE_PER_STEP
       })
     ;
 
