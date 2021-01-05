@@ -5,13 +5,14 @@ const MASK_WHOLE_TO_CIRCLE = 5;
 export default class GameTimer extends Base {
 
   particlesConfig = {
-    quantity: 50,   // number of particles on circle
+    quantity: 30,   // number of particles on circle
     speed: 80,      // lower -> slower (px/sec?)
     frequency: 250, // delay between particles shoot
     lifespan: {     // time of life for single particle - random
       min: 500,
       max: 1500
-    }
+    },
+    maxParticles: 200
   };
 
   timer: number = 0;
@@ -47,7 +48,6 @@ export default class GameTimer extends Base {
         if( Math.abs(this.timer - tween.getValue()) >= 1000  ) {  // optimize - only update once per second
           this.timer = tween.getValue();
           this.updateScales();
-          console.log(tween.getValue());
         }
       },
       // time's over!
@@ -92,13 +92,14 @@ export default class GameTimer extends Base {
       maxVelocityX: this.particlesConfig.speed,
       maxVelocityY: this.particlesConfig.speed,
       quantity: this.particlesConfig.quantity,
-      maxParticles: 400,
+      maxParticles: this.particlesConfig.maxParticles,
       alpha:      { start: 1, end: 0 }
     });
   }
 
   updateScales(): void {
     const DISTANCE_PER_STEP = 0.05;
+    const EMITTER_BASE_DIST = 0.6;
 
     const t = this.timer / 1000;
 
@@ -116,15 +117,15 @@ export default class GameTimer extends Base {
     // emitter circle
     this.particlesEmitterShape?.setTo( 
       this.getX(0.5), this.getY(0.5), 
-      this.getDimension(0.55 + t * DISTANCE_PER_STEP/2) 
+      this.getDimension(EMITTER_BASE_DIST + t * DISTANCE_PER_STEP/2) 
     );
     // particles
     this.particlesEmitter
       // particle size with some randomness
       // + based on emitter radius: further -> larger
       ?.setScale({ 
-        min: this.getScale(0.20, 128) + t * DISTANCE_PER_STEP, 
-        max: this.getScale(0.3, 128) + t * DISTANCE_PER_STEP
+        min: this.getScale(0.4, 128) + t * DISTANCE_PER_STEP, 
+        max: this.getScale(0.5, 128) + t * DISTANCE_PER_STEP
       })
     ;
 
