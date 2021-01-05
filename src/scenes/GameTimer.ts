@@ -45,7 +45,7 @@ export default class GameTimer extends Base {
       
       onUpdate: (tween: Phaser.Tweens.Tween) => {
         this.timer = tween.getValue();
-        if( tween.getValue() % 1000 <= 50  ) {  // optimize - only update once per second
+        if( tween.getValue() % 1000 <= 10  ) {  // optimize - only update once per second
           this.updateScales();
         }
       },
