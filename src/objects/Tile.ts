@@ -62,7 +62,7 @@ export default class Tile {
     graphics.moveTo( start.x, start.y );
 
     const angleStep = (toAngle - fromAngle)/5;
-    const fluct = 5;
+    const fluct = 8;
     let points: Phaser.Math.Vector2[] = [ start ];
     for( let angle = fromAngle + angleStep; angle <= toAngle - angleStep; angle += angleStep ) {
       const point = PointOnCircle(

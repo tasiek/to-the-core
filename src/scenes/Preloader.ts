@@ -45,7 +45,7 @@ class Preloader extends Base {
   create ()
   {
     super.create();
-    this.startScene('intro');
+    this.startScene('game');  // intro
   }
 
 }

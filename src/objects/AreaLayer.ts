@@ -42,16 +42,6 @@ export default class AreaLayer extends Phaser.GameObjects.Graphics {
     const tileAngle = 360.0 / config.tilesPerLayer;
 
     this.clear();
-    
-    /*
-    this.fillStyle( this.getCurrentFillColor() );
-    this.fillCircle(
-      0, 0,
-      this.baseScene.getDimension(0.3)
-    );
-    */
-    
-    
     this.tiles.forEach( (tile, i) => {
       new Tile( 
         this.baseScene, this, tile,
@@ -61,40 +51,6 @@ export default class AreaLayer extends Phaser.GameObjects.Graphics {
       );
     });
     this.scene.add.existing( this );
-    
-
-   /* // tests - webgl only
-    const radius = this.baseScene.getDimension(0.3) * this.getCurrentScale();
-    const circle = new Phaser.Geom.Circle(
-      this.baseScene.getX(0.5), 
-      this.baseScene.getY(0.5), 
-      radius,
-    );
-    const tiles = this.baseScene.add.group({ key: 'brick', repeat: 11 })
-      .setTint( 
-        config.colors.tile1,
-        config.colors.tile1,
-        config.colors.bg,
-        config.colors.bg,
-      )
-      .setBlendMode(Phaser.BlendModes.DIFFERENCE)
-    ;
-    tiles.children.iterate( t => {
-      (t as Phaser.GameObjects.Sprite)
-        .setScale( 0.7 * this.getCurrentScale() )
-        .setAlpha( this.getAlpha(this.distance) );
-      ;
-    });
-    Phaser.Actions.PlaceOnCircle( 
-      tiles.getChildren(), 
-      circle,  
-      Phaser.Math.DegToRad(90),
-      Phaser.Math.DegToRad(360 + 90),
-    );
-    Phaser.Actions.SetRotation(tiles.getChildren(), 0, 1/12*2*Math.PI);
-    */
-    /* /// tests - webgl only */
-
     
     // set initial values
     this.setX( this.getCurrentCenter().x );

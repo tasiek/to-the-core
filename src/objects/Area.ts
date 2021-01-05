@@ -62,10 +62,17 @@ export default class Area extends Phaser.GameObjects.Graphics {
   stepUp() {
     this.step++;
     this.stepUpdated();
-    
+    this.stepEffect();
+  }
+
+  getStep(): number {
+    return this.step;
+  }
+
+  stepEffect(): void {
     this.baseScene.tweens.addCounter({
       from: 0,
-      to: 0.15,
+      to: 0.2,
       duration: 100,
       onUpdate: (tween: Phaser.Tweens.Tween) => {
         const tint = Phaser.Display.Color.Interpolate.ColorWithColor(
@@ -81,10 +88,6 @@ export default class Area extends Phaser.GameObjects.Graphics {
       ease: 'Quad.easeInOut',
       yoyo: true
     });
-  }
-
-  getStep(): number {
-    return this.step;
   }
 
   getCurrentLayer(): AreaTilesRow {
